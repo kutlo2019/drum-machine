@@ -50,6 +50,13 @@ code {
 }
 
 #display {
+  display: flex;
+  flex-direction: column;
   border: 1px solid blue;
+}
+
+.sound-bank {
+  position: relative;
+  bottom: 0;
 }
 

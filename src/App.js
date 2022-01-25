@@ -116,20 +116,35 @@ const bankTwo = [
 ];
 
 class App extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       bank: bankOne
     };
     this.playAudio = this.playAudio.bind(this);
+    this.bankOneSetup = this.bankOneSetup.bind(this);
+    this.bankTwoSetup = this.bankTwoSetup.bind(this);
   };
-  
+
+
   playAudio(trigger) {
     const sound = document.getElementById(trigger);
     sound.currentTime = 0;
     sound.play();
   };
-  
+
+  bankOneSetup() {
+    this.setState({
+      bank: bankOne
+    })
+  }
+
+  bankTwoSetup() {
+    this.setState({
+      bank: bankTwo
+    })
+  }
+
   render() {
     return (
       <div id="drum-machine">
@@ -143,10 +158,13 @@ class App extends React.Component {
                 url={sound.url}
                 handleClick={this.playAudio}>
               </DrumPad>
-             );
+            );
           })}
         </div>
-        <Display />
+        <Display
+          bankOneSetup={this.bankOneSetup}
+          bankTwoSetup={this.bankTwoSetup}
+        />
       </div>
     );
   }
@@ -154,10 +172,13 @@ class App extends React.Component {
 
 function Display(props) {
   const [clip, setClip] = React.useState('')
+
   const checkKeyDown = (event) => {
+
     const keyPressed = event.key.toUpperCase()
     let audio = ''
-    switch(event.keyCode) {
+
+    switch (event.keyCode) {
       case 81:
         audio = document.getElementById(keyPressed);
         setClip(audio.closest('div').id)
@@ -196,7 +217,7 @@ function Display(props) {
         return;
     }
   }
-  
+
   React.useEffect(() => {
     const clips = document.querySelectorAll('.drum-pad')
     clips.forEach(clip => {
@@ -205,19 +226,37 @@ function Display(props) {
       })
     })
   })
-  
+
   React.useEffect(() => {
     window.addEventListener('keydown', checkKeyDown);
-    
+
     return () => {
       window.removeEventListener('keydown', checkKeyDown)
     }
   }, [])
-  
+
   return (
     <div id="display">
       <h2>Sound Played: </h2>
-      <p>{clip}</p>
+      <p >{clip}</p>
+      <div className='sound-bank'>
+        <h2>Choose sound bank: </h2>
+        <label for="bank1">Bank1</label>
+        <input 
+          type="radio"
+          id="bank1"
+          name='bank'
+          onChange={() => props.bankOneSetup()}
+          defaultChecked
+        />
+        <label for="bank1">Bank2</label>
+        <input
+          type="radio"
+          id="bank2"
+          name='bank'
+          onChange={() => props.bankTwoSetup()}
+        />
+      </div>
     </div>
   );
 }
@@ -225,7 +264,7 @@ function Display(props) {
 
 function DrumPad(props) {
   const handleKeyDown = (event) => {
-    switch(event.keyCode) {
+    switch (event.keyCode) {
       case 81:
         props.handleClick('Q');
         return;
@@ -255,7 +294,7 @@ function DrumPad(props) {
         return;
     }
   }
-  
+
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
 
@@ -263,12 +302,12 @@ function DrumPad(props) {
       window.removeEventListener('keydown', handleKeyDown);
     }
 
-    
+
   }, []);
 
   return (
-    <div 
-      className="drum-pad" 
+    <div
+      className="drum-pad"
       id={props.clipName}
       onClick={() => props.handleClick(props.innerText)}
     >
@@ -281,6 +320,6 @@ function DrumPad(props) {
       ></audio>
     </div>
   );
-} 
+}
 
 export default App
