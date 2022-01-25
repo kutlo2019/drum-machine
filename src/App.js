@@ -146,11 +146,82 @@ class App extends React.Component {
              );
           })}
         </div>
-        <div id="display"></div>
+        <Display />
       </div>
     );
   }
 }
+
+function Display(props) {
+  const [clip, setClip] = React.useState('')
+  const checkKeyDown = (event) => {
+    const keyPressed = event.key.toUpperCase()
+    let audio = ''
+    switch(event.keyCode) {
+      case 81:
+        audio = document.getElementById(keyPressed);
+        setClip(audio.closest('div').id)
+        return;
+      case 87:
+        audio = document.getElementById(keyPressed);
+        setClip(audio.closest('div').id)
+        return;
+      case 69:
+        audio = document.getElementById(keyPressed);
+        setClip(audio.closest('div').id)
+        return;
+      case 65:
+        audio = document.getElementById(keyPressed);
+        setClip(audio.closest('div').id)
+        return;
+      case 83:
+        audio = document.getElementById(keyPressed);
+        setClip(audio.closest('div').id)
+        return;
+      case 68:
+        audio = document.getElementById(keyPressed);
+        setClip(audio.closest('div').id)
+        return;
+      case 90:
+        audio = document.getElementById(keyPressed);
+        setClip(audio.closest('div').id)
+        return;
+      case 88:
+        audio = document.getElementById(keyPressed);
+        setClip(audio.closest('div').id)
+        return;
+      case 67:
+        audio = document.getElementById(keyPressed);
+        setClip(audio.closest('div').id)
+        return;
+    }
+  }
+  
+  React.useEffect(() => {
+    const clips = document.querySelectorAll('.drum-pad')
+    clips.forEach(clip => {
+      clip.addEventListener('click', () => {
+        setClip(clip.id)
+      })
+    })
+  })
+  
+  React.useEffect(() => {
+    window.addEventListener('keydown', checkKeyDown);
+    
+    return () => {
+      window.removeEventListener('keydown', checkKeyDown)
+    }
+  }, [])
+  
+  return (
+    <div id="display">
+      <h2>Sound Played: </h2>
+      <p>{clip}</p>
+    </div>
+  );
+}
+
 
 function DrumPad(props) {
   const handleKeyDown = (event) => {

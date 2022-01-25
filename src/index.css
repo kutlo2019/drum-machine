@@ -38,6 +38,7 @@ code {
 #display {
   width: 50%;
   background-color: white;
+  font-size: 1rem;
 }
 
 .drum-pad {
